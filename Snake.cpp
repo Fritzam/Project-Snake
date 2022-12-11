@@ -8,6 +8,7 @@ int main() {
     int snake_segments = 3;
     char granice_mapy[wymiary_mapy][wymiary_mapy];
     char snake[snake_segments] = {'@', '#', '#'};
+    bool alive = true;
 
     //Generating borders of the snake game.
     for (int i = 0; i < wymiary_mapy; i++) {
@@ -37,6 +38,8 @@ int main() {
         }
         cout << endl;
     }
+
+    //Moving snake.
 
     cout << "--------------------------------------------" << endl;
     cout << snake[0] << snake[1] << snake[2] << endl;
