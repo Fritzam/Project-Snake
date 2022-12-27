@@ -1,22 +1,35 @@
 #include <iostream>
+#include <vector>
 
 using namespace std;
 
+void Display(char granice_mapy[][16]) {
+    //Displaying borders, and the snake.
+    for (int i = 0; i < 16; i++) {
+        for (int j = 0; j < 16; j++) {
+            cout << granice_mapy[i][j];
+        }
+        cout << endl;
+    }
+}
+
+
 int main() {
     //Declarations for the game.
-    int wymiary_mapy = 16;
-    int snake_segments = 3;
-    char granice_mapy[wymiary_mapy][wymiary_mapy];
-    char snake[snake_segments] = {'@', '#', '#'};
+    char granice_mapy[16][16];
+    vector <char> snake_segments{'@', '#', '#'};
     bool alive = true;
+    int position_y = 7;
+    int position_x = 7;
+
 
     //Generating borders of the snake game.
-    for (int i = 0; i < wymiary_mapy; i++) {
-        for (int j = 0; j < wymiary_mapy; j++) {
-            if (i == 0 || i == wymiary_mapy - 1) {
+    for (int i = 0; i < 16; i++) {
+        for (int j = 0; j < 16; j++) {
+            if (i == 0 || i == 15) {
                 granice_mapy[i][j] = '=';
             }
-            else if ((i != 0 || i != wymiary_mapy - 1) && (j == 0 || j == wymiary_mapy - 1)) {
+            else if ((i != 0 || i != 15) && (j == 0 || j == 15)) {
                 granice_mapy[i][j] = '|';
             }
             else {
@@ -27,23 +40,31 @@ int main() {
 
 
     //Generating snake inside of the borders.
-    for (int i = 0; i < snake_segments; i++) {
-        granice_mapy[(wymiary_mapy/2 - 1 + i)][wymiary_mapy/2 - 1] = snake[i];
+    for (int i = 0; i < snake_segments.size(); i++) {
+        granice_mapy[7][7] = snake_segments[i];
     }
 
-    //Displaying borders, and the snake.
-    for (int i = 0; i < wymiary_mapy; i++) {
-        for (int j = 0; j < wymiary_mapy; j++) {
-            cout << granice_mapy[i][j];
+
+
+
+    for (int i = 0; i < 3; i++) {
+        //Moving snake.
+        for (int i = 0; i < snake_segments.size(); i++) {
+            if (i == snake_segments.size() - 1) {
+                granice_mapy[position_y - 1][position_x] = snake_segments[i];
+                granice_mapy[position_y][position_x] = ' ';
+                position_y--;
+            } else {
+                granice_mapy[position_y - 1][position_x] = snake_segments[i];
+            }
         }
-        cout << endl;
+        Display(granice_mapy);
     }
-
-    //Moving snake.
 
     cout << "--------------------------------------------" << endl;
-    cout << snake[0] << snake[1] << snake[2] << endl;
+    cout << snake_segments[0] << snake_segments[1] << snake_segments[2] << endl;
     cout << "--------------------------------------------" << endl;
 
     return 0;
 }
+
