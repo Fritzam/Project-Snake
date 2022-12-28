@@ -13,6 +13,27 @@ void Display(char granice_mapy[][16]) {
     }
 }
 
+void MoveForward(char granice_mapy[][16], bool alive, int &position_y, int position_x, vector <char> snake_segments) {
+    while(alive) {
+        //Moving snake.
+        for (int j = 0; j < snake_segments.size(); j++) {
+            if (j != snake_segments.size() - 1) {
+                granice_mapy[(position_y - 1) + j][position_x] = snake_segments[j];
+            }
+            else if (j == snake_segments.size() - 1) {
+                granice_mapy[(position_y - 1) + j][position_x] = snake_segments[j];
+                granice_mapy[(position_y) + j][position_x] = ' ';
+            }
+        }
+        position_y--;
+        Display(granice_mapy);
+        if (granice_mapy[position_y - 1][position_x] == '=') {
+            cout << "YOU ARE DEAD!" << endl;
+            alive=false;
+        }
+    }
+}
+
 
 int main() {
     //Declarations for the game.
@@ -44,26 +65,7 @@ int main() {
         granice_mapy[7][7] = snake_segments[i];
     }
 
-
-
-
-    for (int i = 0; i < 3; i++) {
-        //Moving snake.
-        for (int i = 0; i < snake_segments.size(); i++) {
-            if (i == snake_segments.size() - 1) {
-                granice_mapy[position_y - 1][position_x] = snake_segments[i];
-                granice_mapy[position_y][position_x] = ' ';
-                position_y--;
-            } else {
-                granice_mapy[position_y - 1][position_x] = snake_segments[i];
-            }
-        }
-        Display(granice_mapy);
-    }
-
-    cout << "--------------------------------------------" << endl;
-    cout << snake_segments[0] << snake_segments[1] << snake_segments[2] << endl;
-    cout << "--------------------------------------------" << endl;
+    MoveForward(granice_mapy, alive, position_y, position_x, snake_segments);
 
     return 0;
 }
