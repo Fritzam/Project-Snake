@@ -3,69 +3,144 @@
 
 using namespace std;
 
-void Display(char granice_mapy[][16]) {
+
+struct Segment {
+        char symbol;
+        int position_y;
+        int position_x;
+    };
+
+void Display(char mapa[][16]) {
     //Displaying borders, and the snake.
     for (int i = 0; i < 16; i++) {
         for (int j = 0; j < 16; j++) {
-            cout << granice_mapy[i][j];
+            cout << mapa[i][j];
         }
         cout << endl;
     }
 }
 
-void MoveForward(char granice_mapy[][16], bool alive, int &position_y, int position_x, vector <char> snake_segments) {
+void MoveFoward(char mapa[0][16], bool alive, vector <Segment> &Snake) {
     while(alive) {
-        //Moving snake.
-        for (int j = 0; j < snake_segments.size(); j++) {
-            if (j != snake_segments.size() - 1) {
-                granice_mapy[(position_y - 1) + j][position_x] = snake_segments[j];
+        for (int i = 0; i < Snake.size(); i++) {
+            if (i == Snake.size() - 1) {
+                mapa[Snake[i].position_y - 1][Snake[i].position_x] = Snake[i].symbol;
+                Snake[i].position_y--;
+                mapa[Snake[i].position_y + 1][Snake[i].position_x] = ' ';
+
             }
-            else if (j == snake_segments.size() - 1) {
-                granice_mapy[(position_y - 1) + j][position_x] = snake_segments[j];
-                granice_mapy[(position_y) + j][position_x] = ' ';
+            else {
+                mapa[Snake[i].position_y + -1][Snake[i].position_x] = Snake[i].symbol;
+                Snake[i].position_y--;
             }
         }
-        position_y--;
-        Display(granice_mapy);
-        if (granice_mapy[position_y - 1][position_x] == '=') {
-            cout << "YOU ARE DEAD!" << endl;
+        Display(mapa);
+        if (mapa[Snake[0].position_y - 1][Snake[0].position_x] == '=') {
+            cout << "You are dead!" << endl;
             alive=false;
         }
     }
 }
 
-
-int main() {
-    //Declarations for the game.
-    char granice_mapy[16][16];
-    vector <char> snake_segments{'@', '#', '#'};
-    bool alive = true;
-    int position_y = 7;
-    int position_x = 7;
-
-
-    //Generating borders of the snake game.
-    for (int i = 0; i < 16; i++) {
-        for (int j = 0; j < 16; j++) {
-            if (i == 0 || i == 15) {
-                granice_mapy[i][j] = '=';
-            }
-            else if ((i != 0 || i != 15) && (j == 0 || j == 15)) {
-                granice_mapy[i][j] = '|';
+void MoveLeft(char mapa[0][16], bool alive, vector <Segment> &Snake) {
+    while(alive) {
+        int change_direction = Snake[0].position_y;
+        for (int j = 0; j < Snake.size(); j++) {
+            //Jeżeli dotyczy ostatniego segmentu węża.
+            if (j == Snake.size() - 1) {
+                //Jeżeli segment jest na wysokości głowy.
+                if (Snake[j].position_y == change_direction) {
+                    mapa[Snake[j].position_y][Snake[j].position_x - 1] = Snake[j].symbol;
+                    mapa[Snake[j].position_y][Snake[j].position_x] = ' ';
+                    Snake[j].position_x--;
+                }
+                else {
+                    //Jeżeli nie jest na wysokości głowy.
+                    mapa[Snake[j].position_y - 1][Snake[j].position_x] = Snake[j].symbol;
+                    mapa[Snake[j].position_y][Snake[j].position_x] = ' ';
+                    Snake[j].position_y--;
+                }
             }
             else {
-                granice_mapy[i][j] = ' ';
+            //Jeżeli nie dotyczy ostatniego segmentu węża.
+                //Jeżeli segment jest na pozycji Y głowy węża.
+                if (Snake[j].position_y == change_direction) {
+                    mapa[Snake[j].position_y][Snake[j].position_x - 1] = Snake[j].symbol;
+                    Snake[j].position_x--;
+                }
+                //Jeżeli segment nie jest na pozycji Y głowy węża.
+                else {
+                    mapa[Snake[j].position_y - 1][Snake[j].position_x] = Snake[j].symbol;
+                    Snake[j].position_y--;
+                }
+            }
+        }
+            Display(mapa);
+            if (mapa[Snake[0].position_y][Snake[0].position_x - 1] == '|') {
+                cout << "YOU ARE DEAD!";
+                alive=false;
             }
         }
     }
 
 
-    //Generating snake inside of the borders.
-    for (int i = 0; i < snake_segments.size(); i++) {
-        granice_mapy[7][7] = snake_segments[i];
+int main() {
+    //Deklaracja tabeli gry.
+    char mapa[16][16];
+
+    //Deklaracja structu snake'.
+    struct Segment head, body1, body2, body3, body4;
+
+    //Deklaracja vectora Snake
+    vector <Segment> Snake;
+
+    //Inicjalizacja boole'a odpowiadającego za życie Snake'a.
+    bool alive = true;
+
+    //Inizjalizowanie wartości struktur Segment.
+    head = {'@', 6, 7};
+    body1 = {'#', 7, 7};
+    body2 = {'#', 8, 7};
+    body3 = {'#', 9, 7};
+    body4 = {'#', 10, 7};
+
+    //Dodawanie struktur do vectora;
+    Snake.push_back(head);
+    Snake.push_back(body1);
+    Snake.push_back(body2);
+    Snake.push_back(body3);
+    Snake.push_back(body4);
+
+
+
+
+
+    //Wygenerowanie mapy gry.
+    for (int i = 0; i < 16; i++) {
+        for (int j = 0; j < 16; j++) {
+            if (i == 0 || i == 15) {
+                mapa[i][j] = '=';
+            }
+            else if (j == 0 || j == 15) {
+                mapa[i][j] = '|';
+            }
+            else {
+                mapa[i][j] = ' ';
+            }
+        }
     }
 
-    MoveForward(granice_mapy, alive, position_y, position_x, snake_segments);
+    //Wygenerowanie Snake'a na mapie.
+    for (int i = 0; i < Snake.size(); i++) {
+        mapa[Snake[i].position_y][Snake[i].position_x] = Snake[i].symbol;
+    }
+    //Display(mapa);
+    //Display(mapa);
+    //Funkcja do poruszania się naprzód.
+    //MoveFoward(mapa, alive, Snake);
+    Display(mapa);
+    MoveLeft(mapa, alive, Snake);
+
 
     return 0;
 }
