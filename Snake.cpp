@@ -1,6 +1,7 @@
 #include <iostream>
 #include <ncurses.h>
 #include <vector>
+#include <random>
 
 using namespace std;
 
@@ -11,7 +12,7 @@ struct Segment {
     };
 
 void Display(char mapa[][16]) {
-    //Displaying borders, and the snake.
+    //Displays every cell in an array, character after character.
     for (int i = 0; i < 16; i++) {
         for (int j = 0; j < 16; j++) {
             mvaddch(i, j, mapa[i][j]);
@@ -20,6 +21,7 @@ void Display(char mapa[][16]) {
 }
 
 void GenerateGameMap(char mapa[][16]) {
+    //Fills outermost cells with border symbols, and rest with empty chars.
     for (int i = 0; i < 16; i++) {
         for (int j = 0; j < 16; j++) {
             if (i == 0 || i == 15) {
@@ -265,6 +267,32 @@ bool MoveDown (char mapa[][16], bool &alive, vector <Segment> &Snake) {
     return true;
 }
 
+void CreateFruit(char mapa[][16]) {
+    //Declaring coordinates of a single fruit.
+    int position_y;
+    int position_x;
+
+    //Declaring engines.
+    random_device rd;
+    mt19937 gen(rd());
+
+    //Setting random range.
+    uniform_int_distribution<> dist(1, 14);
+
+    //Setting base value's.
+    position_y = dist(gen);
+    position_x = dist(gen);
+
+    //While loop that generates another set of coordinates if base one would create a fruit in Snake's segment's place.
+    while (mapa[position_y][position_x] == '@' || mapa[position_y][position_x] == '#') {
+        position_y = dist(gen);
+        position_x = dist(gen);
+    }
+
+    //Appending to the map.
+    mapa[position_y][position_x] = '*';
+}
+
 int main() {
     //Declarating an array of chars, which will contain every game cell.
     char mapa[16][16];
@@ -280,6 +308,9 @@ int main() {
 
     //Variable responsible for holding user's input.
     int key;
+
+    //Initializing score variable.
+    int score = 0;
 
     //Initializing struct elements.
     head = {'@', 6, 7};
@@ -305,6 +336,7 @@ int main() {
         //Generating map and snake;
         GenerateGameMap(mapa);
         GenerateSnake(mapa, Snake);
+        CreateFruit(mapa);
 
         //Loop controlling the game.
         while (alive) {
