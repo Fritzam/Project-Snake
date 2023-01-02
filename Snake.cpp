@@ -44,12 +44,48 @@ void GenerateSnake(char mapa[][16], vector <Segment> Snake) {
     }
 }
 
-bool MoveUp (char mapa[][16], bool &alive, vector <Segment> &Snake) {
+void CreateInitialFruit(char mapa[][16]) {
+    mapa[2][7] = '*';
+}
 
-    //If next execution of the function would put Snake in the wall set the game controlling flag to false.
+void CreateFruit(char mapa[][16]) {
+    //Declaring coordinates of a single fruit.
+    int position_y;
+    int position_x;
+
+    //Declaring engines.
+    random_device rd;
+    mt19937 gen(rd());
+
+    //Setting random range.
+    uniform_int_distribution<> dist(1, 14);
+
+    //Setting base value's.
+    position_y = dist(gen);
+    position_x = dist(gen);
+
+    //While loop that generates another set of coordinates if base one would create a fruit in Snake's segment's place.
+    while (mapa[position_y][position_x] == '@' || mapa[position_y][position_x] == '#') {
+        position_y = dist(gen);
+        position_x = dist(gen);
+    }
+
+    //Appending to the map.
+    mapa[position_y][position_x] = '*';
+}
+
+bool MoveUp (char mapa[][16], bool &alive, vector <Segment> &Snake, int &score) {
+
+    //If current execution of the function would put Snake in the wall return the game controlling flag to false.
     if (mapa[Snake[0].position_y - 1][Snake[0].position_x] == '=') {
         printw("You are dead!");
         return false;
+    }
+
+    //
+    if (mapa[Snake[0].position_y - 1][Snake[0].position_x] == '*') {
+        score += 10;
+        CreateFruit(mapa);
     }
 
     //Take the current y,x coords and put them into variables.
@@ -100,12 +136,17 @@ bool MoveUp (char mapa[][16], bool &alive, vector <Segment> &Snake) {
     return true;
 }
 
-bool MoveLeft (char mapa[][16], bool &alive, vector <Segment> &Snake) {
+bool MoveLeft (char mapa[][16], bool &alive, vector <Segment> &Snake, int &score) {
 
-    //If next execution of the function would put Snake in the wall set the game controlling flag to false.
+    //If current execution of the function would put Snake in the wall return the game controlling flag to false.
     if (mapa[Snake[0].position_y][Snake[0].position_x - 1] == '|') {
         printw("You are dead!");
         return false;
+    }
+
+    if (mapa[Snake[0].position_y][Snake[0].position_x - 1] == '*') {
+        score += 10;
+        CreateFruit(mapa);
     }
 
     //Take the current y,x coords and put them into variables.
@@ -156,12 +197,17 @@ bool MoveLeft (char mapa[][16], bool &alive, vector <Segment> &Snake) {
     return true;
 }
 
-bool MoveRight (char mapa[][16], bool &alive, vector <Segment> &Snake) {
+bool MoveRight (char mapa[][16], bool &alive, vector <Segment> &Snake, int &score) {
 
-    //If next execution of the function would put Snake in the wall set the game controlling flag to false.
+    //If current execution of the function would put Snake in the wall return the game controlling flag to false.
     if (mapa[Snake[0].position_y][Snake[0].position_x + 1] == '|') {
         printw("You are dead!");
         return false;
+    }
+
+    if (mapa[Snake[0].position_y][Snake[0].position_x + 1] == '*') {
+        score += 10;
+        CreateFruit(mapa);
     }
 
     //Take the current y,x coords and put them into variables.
@@ -212,12 +258,18 @@ bool MoveRight (char mapa[][16], bool &alive, vector <Segment> &Snake) {
     return true;
 }
 
-bool MoveDown (char mapa[][16], bool &alive, vector <Segment> &Snake) {
+bool MoveDown (char mapa[][16], bool &alive, vector <Segment> &Snake, int &score) {
 
-    //If next execution of the function would put Snake in the wall set the game controlling flag to false.
+    //If current execution of the function would put Snake in the wall return the game controlling flag to false.
     if (mapa[Snake[0].position_y + 1][Snake[0].position_x] == '=') {
         printw("You are dead!");
         return false;
+    }
+
+    //If current execution will make Snake eat a fruit add 10 points to the "score", and generate new one.
+    if (mapa[Snake[0].position_y + 1][Snake[0].position_x] == '*') {
+        score += 10;
+        CreateFruit(mapa);
     }
 
     //Take the current y,x coords and put them into variables.
@@ -267,32 +319,6 @@ bool MoveDown (char mapa[][16], bool &alive, vector <Segment> &Snake) {
     return true;
 }
 
-void CreateFruit(char mapa[][16]) {
-    //Declaring coordinates of a single fruit.
-    int position_y;
-    int position_x;
-
-    //Declaring engines.
-    random_device rd;
-    mt19937 gen(rd());
-
-    //Setting random range.
-    uniform_int_distribution<> dist(1, 14);
-
-    //Setting base value's.
-    position_y = dist(gen);
-    position_x = dist(gen);
-
-    //While loop that generates another set of coordinates if base one would create a fruit in Snake's segment's place.
-    while (mapa[position_y][position_x] == '@' || mapa[position_y][position_x] == '#') {
-        position_y = dist(gen);
-        position_x = dist(gen);
-    }
-
-    //Appending to the map.
-    mapa[position_y][position_x] = '*';
-}
-
 int main() {
     //Declarating an array of chars, which will contain every game cell.
     char mapa[16][16];
@@ -336,7 +362,7 @@ int main() {
         //Generating map and snake;
         GenerateGameMap(mapa);
         GenerateSnake(mapa, Snake);
-        CreateFruit(mapa);
+        CreateInitialFruit(mapa);
 
         //Loop controlling the game.
         while (alive) {
@@ -349,17 +375,20 @@ int main() {
             //Executes movement functions. Which one depends on user input.
             switch(key) {
                 case KEY_UP:
-                    alive = MoveUp(mapa, alive, Snake);
+                    alive = MoveUp(mapa, alive, Snake, score);
                     break;
                 case KEY_LEFT:
-                    alive = MoveLeft(mapa, alive, Snake);
+                    alive = MoveLeft(mapa, alive, Snake, score);
                     break;
                 case KEY_RIGHT:
-                    alive = MoveRight(mapa, alive, Snake);
+                    alive = MoveRight(mapa, alive, Snake, score);
                     break;
                 case KEY_DOWN:
-                    alive = MoveDown(mapa, alive, Snake);
+                    alive = MoveDown(mapa, alive, Snake, score);
                     break;
+                case KEY_BACKSPACE:
+                    endwin();
+                    return 0;
             }
         }
 
