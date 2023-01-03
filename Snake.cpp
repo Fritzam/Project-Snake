@@ -459,11 +459,11 @@ int main() {
     //Bool responsible for Snake's life.
     bool alive = true;
 
-    //Variable responsible for holding user's input.
-    int key;
-
     //Initializing score variable.
     int score = 0;
+
+    //Variables responsible for holding user's input.
+    int key;
 
     //Initializing struct elements.
     head = {'@', 6, 7};
@@ -487,31 +487,83 @@ int main() {
         GenerateSnake(mapa, Snake);
         CreateInitialFruit(mapa);
 
+        //Displays initial map.
+        Display(mapa);
+
+        //Receives first input and assigns it to key variable.
+        key = getch();
+
         //Loop controlling the game.
         while (alive) {
             //Displays map on each iteration.
             Display(mapa);
 
-            //Receives input and assigns it to key variable.
-            key = getch();
-
             //Executes movement functions. Which one depends on user input.
-            switch(key) {
-                case KEY_UP:
-                    alive = MoveUp(mapa, alive, Snake, score);
-                    break;
-                case KEY_LEFT:
-                    alive = MoveLeft(mapa, alive, Snake, score);
-                    break;
-                case KEY_RIGHT:
-                    alive = MoveRight(mapa, alive, Snake, score);
-                    break;
-                case KEY_DOWN:
-                    alive = MoveDown(mapa, alive, Snake, score);
-                    break;
-                case KEY_BACKSPACE:
-                    endwin();
-                    return 0;
+                switch(key) {
+                    case KEY_UP:
+                        //Execute corresponding function and assign it's return to alive.
+                        alive = MoveUp(mapa, alive, Snake, score);
+
+                        //Wait for 0,3s for user input, assign it to key if encountered.
+                        //Lack of input will make getch() return -1 value.
+                        halfdelay(3);
+                        key = getch();
+
+                        //if no input present, assign key the same value as before.
+                        if (key == -1) {
+                            key = KEY_UP;
+                        }
+                        break;
+
+                    case KEY_LEFT:
+                        //Execute corresponding function and assign it's return to alive.
+                        alive = MoveLeft(mapa, alive, Snake, score);
+
+                        //Wait for 0,3s for user input, assign it to key if encountered.
+                        //Lack of input will make getch() return -1 value.
+                        halfdelay(3);
+                        key = getch();
+
+                        //if no input present, assign key the same value as before.
+                        if (key == -1) {
+                            key = KEY_LEFT;
+                        }
+                        break;
+
+                    case KEY_RIGHT:
+                        //Execute corresponding function and assign it's return to alive.
+                        alive = MoveRight(mapa, alive, Snake, score);
+
+                        //Wait for 0,3s for user input, assign it to key if encountered.
+                        //Lack of input will make getch() return -1 value.
+                        halfdelay(3);
+                        key = getch();
+
+                        //if no input present, assign key the same value as before.
+                        if (key == -1) {
+                            key = KEY_RIGHT;
+                        }
+                        break;
+
+                    case KEY_DOWN:
+                        //Execute corresponding function and assign it's return to alive.
+                        alive = MoveDown(mapa, alive, Snake, score);
+
+                        //Wait for 0,3s for user input, assign it to key if encountered.
+                        //Lack of input will make getch() return -1 value.
+                        halfdelay(3);
+                        key = getch();
+
+                        //if no input present, assign key the same value as before.
+                        if (key == -1) {
+                            key = KEY_DOWN;
+                        }
+                        break;
+
+                    case KEY_BACKSPACE:
+                        //Ends windows and exits program.
+                        endwin();
+                        return 0;
             }
         }
 
