@@ -74,7 +74,11 @@ void CreateFruit(char mapa[][16]) {
     mapa[position_y][position_x] = '*';
 }
 
+
 bool MoveUp (char mapa[][16], bool &alive, vector <Segment> &Snake, int &score) {
+
+    //Flag controlling whether the fruit has been eaten or not.
+    bool FruitEaten = false;
 
     //If current execution of the function would put Snake in the wall return the game controlling flag to false.
     if (mapa[Snake[0].position_y - 1][Snake[0].position_x] == '=') {
@@ -82,8 +86,9 @@ bool MoveUp (char mapa[][16], bool &alive, vector <Segment> &Snake, int &score) 
         return false;
     }
 
-    //
+    //If in current execution of the function Snake will eat a fruit, create another one and give +10 points to the player.
     if (mapa[Snake[0].position_y - 1][Snake[0].position_x] == '*') {
+        FruitEaten = true;
         score += 10;
         CreateFruit(mapa);
     }
@@ -119,15 +124,42 @@ bool MoveUp (char mapa[][16], bool &alive, vector <Segment> &Snake, int &score) 
          }
         //If current segment is a last one:
         else if (i == Snake.size() - 1) {
-            //Print an empty sign at it's location.
-            mapa[Snake[i].position_y][Snake[i].position_x] = ' ';
+            if (FruitEaten == false) {
+                //Print an empty sign at it's location.
+                mapa[Snake[i].position_y][Snake[i].position_x] = ' ';
 
-            //Change it's position to the position of segment's before it.
-            Snake[i].position_y = current_y;
-            Snake[i].position_x = current_x;
+                //Change it's position to the position of segment's before it.
+                Snake[i].position_y = current_y;
+                Snake[i].position_x = current_x;
 
-            //Print it's symbol at an updated location.
-            mapa[Snake[i].position_y][Snake[i].position_x] = Snake[i].symbol;
+                //Print it's symbol at an updated location.
+                mapa[Snake[i].position_y][Snake[i].position_x] = Snake[i].symbol;
+            }
+            else if (FruitEaten == true) {
+                //Record the current segment position into temp variables.
+                int swap_y = Snake[i].position_y;
+                int swap_x = Snake[i].position_x;
+
+                //Change the segment's y and x position to the position of a segment after it.
+                Snake[i].position_y = current_y;
+                Snake[i].position_x = current_x;
+
+                //Print a segment symbol in an updated position.
+                mapa[Snake[i].position_y][Snake[i].position_x] = Snake[i].symbol;
+
+                //Set the FruitEaten flag to false to prevent infinite loop.
+                FruitEaten = false;
+
+                //Add another segment to Snake's vector.
+                Snake.push_back({'#', swap_y, swap_x});
+
+                //Change the current y, x variables to swap, so that next in line segment will change it's position to the position of segment before it.
+                current_y = swap_y;
+                current_x = swap_x;
+
+                //Set the symbol at an updated position.
+                mapa[Snake[i].position_y][Snake[i].position_x] = Snake[i].symbol;
+            }
         }
 
     }
@@ -138,13 +170,18 @@ bool MoveUp (char mapa[][16], bool &alive, vector <Segment> &Snake, int &score) 
 
 bool MoveLeft (char mapa[][16], bool &alive, vector <Segment> &Snake, int &score) {
 
+    //Variable controlling whether fruit has been eaten or not.
+    bool FruitEaten = false;
+
     //If current execution of the function would put Snake in the wall return the game controlling flag to false.
     if (mapa[Snake[0].position_y][Snake[0].position_x - 1] == '|') {
         printw("You are dead!");
         return false;
     }
 
+    //If in current execution of the function Snake will eat a fruit, create another one and give +10 points to the player.
     if (mapa[Snake[0].position_y][Snake[0].position_x - 1] == '*') {
+        FruitEaten = true;
         score += 10;
         CreateFruit(mapa);
     }
@@ -180,15 +217,42 @@ bool MoveLeft (char mapa[][16], bool &alive, vector <Segment> &Snake, int &score
         }
         //If current segment is a last one:
         else if (i == Snake.size() - 1) {
-            //Print an empty sign at it's location.
-            mapa[Snake[i].position_y][Snake[i].position_x] = ' ';
+            if (FruitEaten == false) {
+                //Print an empty sign at it's location.
+                mapa[Snake[i].position_y][Snake[i].position_x] = ' ';
 
-            //Change it's position to the position of segment's before it.
-            Snake[i].position_y = current_y;
-            Snake[i].position_x = current_x;
+                //Change it's position to the position of segment's before it.
+                Snake[i].position_y = current_y;
+                Snake[i].position_x = current_x;
 
-            //Print it's symbol at an updated location.
-            mapa[Snake[i].position_y][Snake[i].position_x] = Snake[i].symbol;
+                //Print it's symbol at an updated location.
+                mapa[Snake[i].position_y][Snake[i].position_x] = Snake[i].symbol;
+            }
+            else if (FruitEaten == true) {
+                //Record the current segment position into temp variables.
+                int swap_y = Snake[i].position_y;
+                int swap_x = Snake[i].position_x;
+
+                //Change the segment's y and x position to the position of a segment after it.
+                Snake[i].position_y = current_y;
+                Snake[i].position_x = current_x;
+
+                //Print a segment symbol in an updated position.
+                mapa[Snake[i].position_y][Snake[i].position_x] = Snake[i].symbol;
+
+                //Set the FruitEaten flag to false to prevent infinite loop.
+                FruitEaten = false;
+
+                //Add another segment to Snake's vector.
+                Snake.push_back({'#', swap_y, swap_x});
+
+                //Change the current y, x variables to swap, so that next in line segment will change it's position to the position of segment before it.
+                current_y = swap_y;
+                current_x = swap_x;
+
+                //Set the symbol at an updated position.
+                mapa[Snake[i].position_y][Snake[i].position_x] = Snake[i].symbol;
+            }
         }
 
     }
@@ -199,13 +263,18 @@ bool MoveLeft (char mapa[][16], bool &alive, vector <Segment> &Snake, int &score
 
 bool MoveRight (char mapa[][16], bool &alive, vector <Segment> &Snake, int &score) {
 
+    //Variable controlling whether fruit has been eaten or not.
+    bool FruitEaten = false;
+
     //If current execution of the function would put Snake in the wall return the game controlling flag to false.
     if (mapa[Snake[0].position_y][Snake[0].position_x + 1] == '|') {
         printw("You are dead!");
         return false;
     }
 
+    //If in current execution of the function Snake will eat a fruit, create another one and give +10 points to the player.
     if (mapa[Snake[0].position_y][Snake[0].position_x + 1] == '*') {
+        FruitEaten = true;
         score += 10;
         CreateFruit(mapa);
     }
@@ -241,15 +310,42 @@ bool MoveRight (char mapa[][16], bool &alive, vector <Segment> &Snake, int &scor
         }
         //If current segment is a last one:
         else if (i == Snake.size() - 1) {
-            //Print an empty sign at it's location.
-            mapa[Snake[i].position_y][Snake[i].position_x] = ' ';
+            if (FruitEaten == false) {
+                //Print an empty sign at it's location.
+                mapa[Snake[i].position_y][Snake[i].position_x] = ' ';
 
-            //Change it's position to the position of segment's before it.
-            Snake[i].position_y = current_y;
-            Snake[i].position_x = current_x;
+                //Change it's position to the position of segment's before it.
+                Snake[i].position_y = current_y;
+                Snake[i].position_x = current_x;
 
-            //Print it's symbol at an updated location.
-            mapa[Snake[i].position_y][Snake[i].position_x] = Snake[i].symbol;
+                //Print it's symbol at an updated location.
+                mapa[Snake[i].position_y][Snake[i].position_x] = Snake[i].symbol;
+            }
+            else if (FruitEaten == true) {
+                //Record the current segment position into temp variables.
+                int swap_y = Snake[i].position_y;
+                int swap_x = Snake[i].position_x;
+
+                //Change the segment's y and x position to the position of a segment after it.
+                Snake[i].position_y = current_y;
+                Snake[i].position_x = current_x;
+
+                //Print a segment symbol in an updated position.
+                mapa[Snake[i].position_y][Snake[i].position_x] = Snake[i].symbol;
+
+                //Set the FruitEaten flag to false to prevent infinite loop.
+                FruitEaten = false;
+
+                //Add another segment to Snake's vector.
+                Snake.push_back({'#', swap_y, swap_x});
+
+                //Change the current y, x variables to swap, so that next in line segment will change it's position to the position of segment before it.
+                current_y = swap_y;
+                current_x = swap_x;
+
+                //Set the symbol at an updated position.
+                mapa[Snake[i].position_y][Snake[i].position_x] = Snake[i].symbol;
+            }
         }
 
     }
@@ -260,14 +356,18 @@ bool MoveRight (char mapa[][16], bool &alive, vector <Segment> &Snake, int &scor
 
 bool MoveDown (char mapa[][16], bool &alive, vector <Segment> &Snake, int &score) {
 
+    //Variable controlling whether fruit has been eaten or not.
+    bool FruitEaten = false;
+
     //If current execution of the function would put Snake in the wall return the game controlling flag to false.
     if (mapa[Snake[0].position_y + 1][Snake[0].position_x] == '=') {
         printw("You are dead!");
         return false;
     }
 
-    //If current execution will make Snake eat a fruit add 10 points to the "score", and generate new one.
+    //If in current execution of the function Snake will eat a fruit, create another one and give +10 points to the player.
     if (mapa[Snake[0].position_y + 1][Snake[0].position_x] == '*') {
+        FruitEaten = true;
         score += 10;
         CreateFruit(mapa);
     }
@@ -303,15 +403,42 @@ bool MoveDown (char mapa[][16], bool &alive, vector <Segment> &Snake, int &score
         }
         //If current segment is a last one:
         else if (i == Snake.size() - 1) {
-            //Print an empty sign at it's location.
-            mapa[Snake[i].position_y][Snake[i].position_x] = ' ';
+            if (FruitEaten == false) {
+                //Print an empty sign at it's location.
+                mapa[Snake[i].position_y][Snake[i].position_x] = ' ';
 
-            //Change it's position to the position of segment's before it.
-            Snake[i].position_y = current_y;
-            Snake[i].position_x = current_x;
+                //Change it's position to the position of segment's before it.
+                Snake[i].position_y = current_y;
+                Snake[i].position_x = current_x;
 
-            //Print it's symbol at an updated location.
-            mapa[Snake[i].position_y][Snake[i].position_x] = Snake[i].symbol;
+                //Print it's symbol at an updated location.
+                mapa[Snake[i].position_y][Snake[i].position_x] = Snake[i].symbol;
+            }
+            else if (FruitEaten == true) {
+                //Record the current segment position into temp variables.
+                int swap_y = Snake[i].position_y;
+                int swap_x = Snake[i].position_x;
+
+                //Change the segment's y and x position to the position of a segment after it.
+                Snake[i].position_y = current_y;
+                Snake[i].position_x = current_x;
+
+                //Print a segment symbol in an updated position.
+                mapa[Snake[i].position_y][Snake[i].position_x] = Snake[i].symbol;
+
+                //Set the FruitEaten flag to false to prevent infinite loop.
+                FruitEaten = false;
+
+                //Add another segment to Snake's vector.
+                Snake.push_back({'#', swap_y, swap_x});
+
+                //Change the current y, x variables to swap, so that next in line segment will change it's position to the position of segment before it.
+                current_y = swap_y;
+                current_x = swap_x;
+
+                //Set the symbol at an updated position.
+                mapa[Snake[i].position_y][Snake[i].position_x] = Snake[i].symbol;
+            }
         }
 
     }
@@ -342,15 +469,11 @@ int main() {
     head = {'@', 6, 7};
     body1 = {'#', 7, 7};
     body2 = {'#', 8, 7};
-    body3 = {'#', 9, 7};
-    body4 = {'#', 10, 7};
 
     //Pushing Snake segments to Snake vector.
     Snake.push_back(head);
     Snake.push_back(body1);
     Snake.push_back(body2);
-    Snake.push_back(body3);
-    Snake.push_back(body4);
 
     //Generating game window, and containing game functions inside.
         //Calling ncurses required functions + raw() and noecho().
