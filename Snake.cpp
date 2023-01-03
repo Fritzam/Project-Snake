@@ -505,12 +505,11 @@ int main() {
                         alive = MoveUp(mapa, alive, Snake, score);
 
                         //Wait for 0,3s for user input, assign it to key if encountered.
-                        //Lack of input will make getch() return -1 value.
                         halfdelay(3);
                         key = getch();
 
-                        //if no input present, assign key the same value as before.
-                        if (key == -1) {
+                        //if no input present, or input is unexpected assign previous value to key.
+                        if (key != KEY_DOWN && key != KEY_LEFT && key != KEY_RIGHT && key != KEY_BACKSPACE) {
                             key = KEY_UP;
                         }
                         break;
@@ -520,12 +519,11 @@ int main() {
                         alive = MoveLeft(mapa, alive, Snake, score);
 
                         //Wait for 0,3s for user input, assign it to key if encountered.
-                        //Lack of input will make getch() return -1 value.
                         halfdelay(3);
                         key = getch();
 
-                        //if no input present, assign key the same value as before.
-                        if (key == -1) {
+                        //if no input present, or input is unexpected assign previous value to key.
+                        if (key != KEY_UP && key != KEY_DOWN && key != KEY_RIGHT && key != KEY_BACKSPACE) {
                             key = KEY_LEFT;
                         }
                         break;
@@ -535,12 +533,11 @@ int main() {
                         alive = MoveRight(mapa, alive, Snake, score);
 
                         //Wait for 0,3s for user input, assign it to key if encountered.
-                        //Lack of input will make getch() return -1 value.
                         halfdelay(3);
                         key = getch();
 
-                        //if no input present, assign key the same value as before.
-                        if (key == -1) {
+                        //if no input present, or input is unexpected assign previous value to key.
+                        if (key != KEY_UP && key != KEY_DOWN && key != KEY_LEFT && key != KEY_BACKSPACE) {
                             key = KEY_RIGHT;
                         }
                         break;
@@ -550,12 +547,11 @@ int main() {
                         alive = MoveDown(mapa, alive, Snake, score);
 
                         //Wait for 0,3s for user input, assign it to key if encountered.
-                        //Lack of input will make getch() return -1 value.
                         halfdelay(3);
                         key = getch();
 
-                        //if no input present, assign key the same value as before.
-                        if (key == -1) {
+                        //if no input present, or input is unexpected assign previous value to key.
+                        if (key != KEY_UP && key != KEY_LEFT && key != KEY_RIGHT && key != KEY_BACKSPACE) {
                             key = KEY_DOWN;
                         }
                         break;
