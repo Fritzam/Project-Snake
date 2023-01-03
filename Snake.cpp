@@ -80,8 +80,8 @@ bool MoveUp (char mapa[][16], bool &alive, vector <Segment> &Snake, int &score) 
     //Flag controlling whether the fruit has been eaten or not.
     bool FruitEaten = false;
 
-    //If current execution of the function would put Snake in the wall return the game controlling flag to false.
-    if (mapa[Snake[0].position_y - 1][Snake[0].position_x] == '=') {
+    //If current execution of the function would put Snake in the wall or another Snake segment, return the game controlling flag as false.
+    if (mapa[Snake[0].position_y - 1][Snake[0].position_x] == '=' || mapa[Snake[0].position_y - 1][Snake[0].position_x] == '#') {
         printw("You are dead!");
         return false;
     }
@@ -173,8 +173,8 @@ bool MoveLeft (char mapa[][16], bool &alive, vector <Segment> &Snake, int &score
     //Variable controlling whether fruit has been eaten or not.
     bool FruitEaten = false;
 
-    //If current execution of the function would put Snake in the wall return the game controlling flag to false.
-    if (mapa[Snake[0].position_y][Snake[0].position_x - 1] == '|') {
+    //If current execution of the function would put Snake in the wall or another Snake segment, return the game controlling flag as false.
+    if (mapa[Snake[0].position_y][Snake[0].position_x - 1] == '|' || mapa[Snake[0].position_y][Snake[0].position_x - 1] == '#') {
         printw("You are dead!");
         return false;
     }
@@ -266,8 +266,8 @@ bool MoveRight (char mapa[][16], bool &alive, vector <Segment> &Snake, int &scor
     //Variable controlling whether fruit has been eaten or not.
     bool FruitEaten = false;
 
-    //If current execution of the function would put Snake in the wall return the game controlling flag to false.
-    if (mapa[Snake[0].position_y][Snake[0].position_x + 1] == '|') {
+    //If current execution of the function would put Snake in the wall or Snake segement, return the game controlling flag as false.
+    if (mapa[Snake[0].position_y][Snake[0].position_x + 1] == '|' || mapa[Snake[0].position_y][Snake[0].position_x + 1] == '#') {
         printw("You are dead!");
         return false;
     }
@@ -359,8 +359,8 @@ bool MoveDown (char mapa[][16], bool &alive, vector <Segment> &Snake, int &score
     //Variable controlling whether fruit has been eaten or not.
     bool FruitEaten = false;
 
-    //If current execution of the function would put Snake in the wall return the game controlling flag to false.
-    if (mapa[Snake[0].position_y + 1][Snake[0].position_x] == '=') {
+    //If current execution of the function would put Snake in the wall or another Snake segment, return the game controlling flag as false.
+    if (mapa[Snake[0].position_y + 1][Snake[0].position_x] == '=' || mapa[Snake[0].position_y + 1][Snake[0].position_x] == '#') {
         printw("You are dead!");
         return false;
     }
