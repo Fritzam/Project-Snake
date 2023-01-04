@@ -491,7 +491,7 @@ int main() {
         Display(mapa);
         mvprintw(3, 29, "Game of Snake");
         mvprintw(6, 50, "Controls: ");
-        mvprintw(8, 45, "Arrow UP: go up.");
+        mvprintw(8, 45, "Arrow UP: to go up.");
         mvprintw(10, 45, "Arrow LEFT: to go left.");
         mvprintw(12, 45, "Arrow RIGHT: to go right.");
         mvprintw(14, 45, "Arrow DOWN: to go down.");
