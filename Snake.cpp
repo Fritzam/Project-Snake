@@ -15,7 +15,7 @@ void Display(char mapa[][16]) {
     //Displays every cell in an array, character after character.
     for (int i = 0; i < 16; i++) {
         for (int j = 0; j < 16; j++) {
-            mvaddch(i + 5, j + 10, mapa[i][j]);
+            mvaddch(i + 4, j + 25, mapa[i][j]);
         }
     }
 }
@@ -478,13 +478,12 @@ int main() {
     Snake.push_back(body1);
     Snake.push_back(body2);
 
-    //Initialized window size.
-    int maximum_cols = 120;
-    int maximum_rows = 120;
-
     //Generating game window, and containing game functions inside.
         //Calling ncurses required functions + raw() and noecho().
+        //Calling getmaxyx, which gets maximum size of screen.
+        //Curs_set decides on whether cursor is visible or not, 0 for invis.
         initscr();
+        curs_set(0);
         raw();
         noecho();
         keypad(stdscr, TRUE);
@@ -500,6 +499,10 @@ int main() {
 
         //Receives first input and assigns it to key variable.
         key = getch();
+
+        if (key != KEY_UP && key != KEY_DOWN && key != KEY_LEFT && key != KEY_RIGHT) {
+            key = KEY_UP;
+        }
 
         //Loop controlling the game.
         while (alive) {
