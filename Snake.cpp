@@ -15,7 +15,7 @@ void Display(char mapa[][16]) {
     //Displays every cell in an array, character after character.
     for (int i = 0; i < 16; i++) {
         for (int j = 0; j < 16; j++) {
-            mvaddch(i, j, mapa[i][j]);
+            mvaddch(i + 5, j + 10, mapa[i][j]);
         }
     }
 }
@@ -489,6 +489,7 @@ int main() {
         noecho();
         keypad(stdscr, TRUE);
 
+
         //Generating map and snake;
         GenerateGameMap(mapa);
         GenerateSnake(mapa, Snake);
@@ -504,6 +505,14 @@ int main() {
         while (alive) {
             //Displays map on each iteration.
             Display(mapa);
+
+            //Prints score field.
+            mvprintw(16, 0, "Score: ");
+
+            //Changes score integer to chars and prints them..? (Propably, I'm not really sure).
+            string score_string = to_string(score);
+            mvprintw(16, 15, score_string.data());
+
 
             //Executes movement functions. Which one depends on user input.
                 switch(key) {
