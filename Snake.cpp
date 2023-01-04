@@ -6,10 +6,10 @@
 using namespace std;
 
 struct Segment {
-        char symbol;
-        int position_y;
-        int position_x;
-    };
+    char symbol;
+    int position_y;
+    int position_x;
+};
 
 void Display(char mapa[][16]) {
     //Displays every cell in an array, character after character.
@@ -462,8 +462,11 @@ int main() {
     //Initializing score variable.
     int score = 0;
 
-    //Variables responsible for holding user's input.
+    //Variable responsible for holding user's input.
     int key;
+
+    //Variable containing Snake's last movement.
+    int last_movement;
 
     //Initializing struct elements.
     head = {'@', 6, 7};
@@ -508,8 +511,8 @@ int main() {
                         halfdelay(3);
                         key = getch();
 
-                        //if no input present, or input is unexpected assign previous value to key.
-                        if (key != KEY_DOWN && key != KEY_LEFT && key != KEY_RIGHT && key != KEY_BACKSPACE) {
+                        //if no input present or input is unexpected, assign previous value to key.
+                        if (key == KEY_DOWN || (key != KEY_LEFT && key != KEY_RIGHT && key != KEY_BACKSPACE)) {
                             key = KEY_UP;
                         }
                         break;
@@ -522,8 +525,8 @@ int main() {
                         halfdelay(3);
                         key = getch();
 
-                        //if no input present, or input is unexpected assign previous value to key.
-                        if (key != KEY_UP && key != KEY_DOWN && key != KEY_RIGHT && key != KEY_BACKSPACE) {
+                        //if no input present or input is unexpected, assign previous value to key.
+                        if (key == KEY_RIGHT || (key != KEY_UP && key != KEY_DOWN && key != KEY_BACKSPACE)) {
                             key = KEY_LEFT;
                         }
                         break;
@@ -536,8 +539,8 @@ int main() {
                         halfdelay(3);
                         key = getch();
 
-                        //if no input present, or input is unexpected assign previous value to key.
-                        if (key != KEY_UP && key != KEY_DOWN && key != KEY_LEFT && key != KEY_BACKSPACE) {
+                        //if no input present or input is unexpected, assign previous value to key.
+                        if (key == KEY_LEFT || (key != KEY_UP && key != KEY_DOWN && key != KEY_BACKSPACE)) {
                             key = KEY_RIGHT;
                         }
                         break;
@@ -550,8 +553,8 @@ int main() {
                         halfdelay(3);
                         key = getch();
 
-                        //if no input present, or input is unexpected assign previous value to key.
-                        if (key != KEY_UP && key != KEY_LEFT && key != KEY_RIGHT && key != KEY_BACKSPACE) {
+                        //if no input present or input is unexpected, assign previous value to key.
+                        if (key == KEY_UP || (key != KEY_LEFT && key != KEY_RIGHT && key != KEY_BACKSPACE)) {
                             key = KEY_DOWN;
                         }
                         break;
