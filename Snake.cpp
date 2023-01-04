@@ -478,6 +478,10 @@ int main() {
     Snake.push_back(body1);
     Snake.push_back(body2);
 
+    //Initialized window size.
+    int maximum_cols = 120;
+    int maximum_rows = 120;
+
     //Generating game window, and containing game functions inside.
         //Calling ncurses required functions + raw() and noecho().
         initscr();
