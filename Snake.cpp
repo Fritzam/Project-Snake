@@ -15,7 +15,7 @@ void Display(char mapa[][16]) {
     //Displays every cell in an array, character after character.
     for (int i = 0; i < 16; i++) {
         for (int j = 0; j < 16; j++) {
-            mvaddch(i + 4, j + 25, mapa[i][j]);
+            mvaddch(i + 4, j + 27, mapa[i][j]);
         }
     }
 }
@@ -82,7 +82,6 @@ bool MoveUp (char mapa[][16], bool &alive, vector <Segment> &Snake, int &score) 
 
     //If current execution of the function would put Snake in the wall or another Snake segment, return the game controlling flag as false.
     if (mapa[Snake[0].position_y - 1][Snake[0].position_x] == '=' || mapa[Snake[0].position_y - 1][Snake[0].position_x] == '#') {
-        printw("You are dead!");
         return false;
     }
 
@@ -175,7 +174,6 @@ bool MoveLeft (char mapa[][16], bool &alive, vector <Segment> &Snake, int &score
 
     //If current execution of the function would put Snake in the wall or another Snake segment, return the game controlling flag as false.
     if (mapa[Snake[0].position_y][Snake[0].position_x - 1] == '|' || mapa[Snake[0].position_y][Snake[0].position_x - 1] == '#') {
-        printw("You are dead!");
         return false;
     }
 
@@ -268,7 +266,6 @@ bool MoveRight (char mapa[][16], bool &alive, vector <Segment> &Snake, int &scor
 
     //If current execution of the function would put Snake in the wall or Snake segement, return the game controlling flag as false.
     if (mapa[Snake[0].position_y][Snake[0].position_x + 1] == '|' || mapa[Snake[0].position_y][Snake[0].position_x + 1] == '#') {
-        printw("You are dead!");
         return false;
     }
 
@@ -361,7 +358,6 @@ bool MoveDown (char mapa[][16], bool &alive, vector <Segment> &Snake, int &score
 
     //If current execution of the function would put Snake in the wall or another Snake segment, return the game controlling flag as false.
     if (mapa[Snake[0].position_y + 1][Snake[0].position_x] == '=' || mapa[Snake[0].position_y + 1][Snake[0].position_x] == '#') {
-        printw("You are dead!");
         return false;
     }
 
@@ -465,9 +461,6 @@ int main() {
     //Variable responsible for holding user's input.
     int key;
 
-    //Variable containing Snake's last movement.
-    int last_movement;
-
     //Initializing struct elements.
     head = {'@', 6, 7};
     body1 = {'#', 7, 7};
@@ -496,11 +489,18 @@ int main() {
 
         //Displays initial map.
         Display(mapa);
+        mvprintw(3, 29, "Game of Snake");
+        mvprintw(6, 50, "Controls: ");
+        mvprintw(8, 45, "Arrow UP: go up.");
+        mvprintw(10, 45, "Arrow LEFT: to go left.");
+        mvprintw(12, 45, "Arrow RIGHT: to go right.");
+        mvprintw(14, 45, "Arrow DOWN: to go down.");
+        mvprintw(16, 45, "BACKSPACE KEY: to exit.");
 
         //Receives first input and assigns it to key variable.
         key = getch();
 
-        if (key != KEY_UP && key != KEY_DOWN && key != KEY_LEFT && key != KEY_RIGHT) {
+        if (key != KEY_UP && key != KEY_DOWN && key != KEY_LEFT && key != KEY_RIGHT && key != KEY_BACKSPACE) {
             key = KEY_UP;
         }
 
@@ -510,11 +510,11 @@ int main() {
             Display(mapa);
 
             //Prints score field.
-            mvprintw(16, 0, "Score: ");
+            mvprintw(20, 27, "Score: ");
 
             //Changes score integer to chars and prints them..? (Propably, I'm not really sure).
             string score_string = to_string(score);
-            mvprintw(16, 15, score_string.data());
+            mvprintw(20, 41, score_string.data());
 
 
             //Executes movement functions. Which one depends on user input.
@@ -581,10 +581,24 @@ int main() {
                         return 0;
             }
         }
+        //Horrible way to clean the earlier print, but it does it's job.
+        mvprintw(20, 27, "                         ");
 
-        //Getch waits for user input before closing the window, endwin() closes the window.
+        //Prints the end game messages including final score
+        mvprintw(20, 28, "You have died!");
+        mvprintw(21, 24, "Your final score was: ");
+
+        //This makes score displayable using ncurses.
+        string score_string = to_string(score);
+        mvprintw(21, 46, score_string.data());
+
+        mvprintw(22, 21, "Press any key to end the game.");
+
+        //Wait for user input to end the window, and the game.
+        cbreak();
         getch();
         endwin();
+
 
 
     return 0;
