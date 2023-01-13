@@ -88,7 +88,7 @@ bool MoveUp (char mapa[][16], bool &alive, vector <Segment> &Snake, int &score) 
     //If in current execution of the function Snake will eat a fruit, create another one and give +10 points to the player.
     if (mapa[Snake[0].position_y - 1][Snake[0].position_x] == '*') {
         FruitEaten = true;
-        score += 10;
+        score += 1;
         CreateFruit(mapa);
     }
 
@@ -180,7 +180,7 @@ bool MoveLeft (char mapa[][16], bool &alive, vector <Segment> &Snake, int &score
     //If in current execution of the function Snake will eat a fruit, create another one and give +10 points to the player.
     if (mapa[Snake[0].position_y][Snake[0].position_x - 1] == '*') {
         FruitEaten = true;
-        score += 10;
+        score += 1;
         CreateFruit(mapa);
     }
 
@@ -272,7 +272,7 @@ bool MoveRight (char mapa[][16], bool &alive, vector <Segment> &Snake, int &scor
     //If in current execution of the function Snake will eat a fruit, create another one and give +10 points to the player.
     if (mapa[Snake[0].position_y][Snake[0].position_x + 1] == '*') {
         FruitEaten = true;
-        score += 10;
+        score += 1;
         CreateFruit(mapa);
     }
 
@@ -364,7 +364,7 @@ bool MoveDown (char mapa[][16], bool &alive, vector <Segment> &Snake, int &score
     //If in current execution of the function Snake will eat a fruit, create another one and give +10 points to the player.
     if (mapa[Snake[0].position_y + 1][Snake[0].position_x] == '*') {
         FruitEaten = true;
-        score += 10;
+        score += 1;
         CreateFruit(mapa);
     }
 
